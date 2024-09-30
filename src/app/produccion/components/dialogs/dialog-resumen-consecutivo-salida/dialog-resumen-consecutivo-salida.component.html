@@ -1,0 +1,72 @@
+
+<div class="container">
+
+
+    <h1 mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle></h1>
+    <mat-dialog-content class="content">
+        <div class="row">
+            <div class="col-sm-12">
+                <mat-card class="color">
+                    <mat-card-header class="titulo">
+                        <mat-card-title style="font-size: smaller;">Resumen Consecutivos Salidas</mat-card-title>
+                        <span class="example-spacer"></span>
+                        <button mat-stroked-button class="icon-button" (click)="abrirVista()">
+                            <mat-icon>visibility</mat-icon>
+                            Ver todos
+                        </button> 
+                    </mat-card-header>
+                    <mat-card-content>
+                        <div class="table-container center-loading-table">
+                            <table *ngIf="!loadingResumenConsumoS" mat-table [dataSource]="dataSourceResumenConsecutivoSalida"
+                                class="mat-elevation-z8 small-table">
+
+                                <ng-container matColumnDef="lote_madre">
+                                    <th mat-header-cell *matHeaderCellDef> LOTE_MADRE </th>
+                                    <td mat-cell *matCellDef="let element"> {{element.lote_madre}} </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="lote_hijo">
+                                    <th mat-header-cell *matHeaderCellDef> LOTE_HIJO </th>
+                                    <td mat-cell *matCellDef="let element"> {{element.lote_hijo}} </td>
+                                </ng-container>
+
+                                <!-- Position Column -->
+                                <ng-container matColumnDef="descripcion">
+                                    <th mat-header-cell *matHeaderCellDef> DESCRIPCION </th>
+                                    <td mat-cell *matCellDef="let element"> {{element.descripcion}} </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="consecutivo">
+                                    <th mat-header-cell *matHeaderCellDef> OPERACIÓN </th>
+                                    <td mat-cell *matCellDef="let element"> {{element.consecutivo}} </td>
+                                </ng-container>
+
+                                <!-- Name Column -->
+                                <ng-container matColumnDef="cantidad">
+                                    <th mat-header-cell *matHeaderCellDef class="align-right"> CANTIDAD </th>
+                                    <td mat-cell *matCellDef="let element" class="align-right"> {{agregarComaMiles(element.cantidad)}} </td>
+                                </ng-container>
+                                
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+                                (dblclick)="loadDialogDetalleSalidaHilo(row)"></tr>
+                            </table>
+                            <mat-spinner *ngIf="loadingResumenConsumoS"></mat-spinner>
+                        </div>
+                        <hr>
+                        <div class="totals-container">
+                            <div class="total total-nombre">Total</div>  <!-- Columna 'Razón Social' -->
+                            <div class="total total-kg">{{ agregarComaMiles(getTotalKG()) }}</div>  <!-- Columna 'Total (Kg)' -->
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <button mat-stroked-button mat-dialog-close>Salir</button>
+    </mat-dialog-actions>
+
+</div>
+

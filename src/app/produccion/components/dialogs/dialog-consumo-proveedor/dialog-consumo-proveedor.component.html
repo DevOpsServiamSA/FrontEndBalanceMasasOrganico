@@ -1,0 +1,72 @@
+<div class="container">
+    <h1 mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle>
+    </h1>
+    <mat-dialog-content class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <mat-card class="color">
+                    <mat-card-header class="titulo">
+                        <mat-card-title style="font-size: smaller;">RESUMEN CONSUMOS POR PROVEEDOR</mat-card-title>
+                        <span class="example-spacer"></span>
+
+                        <button mat-button class="icon-button" (click)="VerTodoConsumoProveedores()">
+                            <mat-icon>visibility</mat-icon>
+                            Ver todos
+                        </button> 
+                    </mat-card-header>
+                    <mat-card-content>
+                        <div class="table-container center-loading-table">
+                            <table *ngIf="!loadingConsumoProveedor" mat-table [dataSource]="dataSourceConsumoProveedor"
+                                class="mat-elevation-z8 small-table">
+
+                                <!-- Position Column -->
+                                <ng-container matColumnDef="nro">
+                                    <th mat-header-cell *matHeaderCellDef> No. </th>
+                                    <td mat-cell *matCellDef="let element"> {{element.nro}} </td>
+                                </ng-container>
+
+                                <!-- Name Column -->
+                                <ng-container matColumnDef="nombre">
+                                    <th mat-header-cell *matHeaderCellDef> Razón Social </th>
+                                    <td mat-cell *matCellDef="let element"> 
+                                        <!-- {{element.nombre}}  -->
+                                        {{ element.nombre ? element.nombre : 'ND' }} 
+                                    </td>
+                                </ng-container>
+
+                                <!-- Weight Column -->
+                                <ng-container matColumnDef="kg">
+                                    <th mat-header-cell *matHeaderCellDef> Total (Kg) </th>
+                                    <td mat-cell *matCellDef="let element"> {{agregarComaMiles(element.kg)}} </td>
+                                </ng-container>
+
+                                <!-- Symbol Column -->
+                                <ng-container matColumnDef="porcentaje">
+                                    <th mat-header-cell *matHeaderCellDef class="align-right"> % Consumo </th>
+                                    <td mat-cell *matCellDef="let element" class="align-right"> {{redondearDecimal(element.porcentaje,2)}}% </td>
+                                </ng-container>
+
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+                                (dblclick)="loadDialogConsumoProveedorDetalle(row)" ></tr>
+
+                            </table>
+                            <mat-spinner *ngIf="loadingConsumoProveedor"></mat-spinner>
+                        </div>
+                        
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+
+        <div class="totals-container">
+            <div class="total total-nombre">Totales</div>  <!-- Columna 'Razón Social' -->
+            <div class="total total-kg">{{ agregarComaMiles(getTotalKG()) }}</div>  <!-- Columna 'Total (Kg)' -->
+            <div class="total total-porcentaje">{{ redondearDecimal(getTotalPorcentaje(), 2) }}%</div>  <!-- Columna '% Consumo' -->
+        </div>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <button mat-stroked-button mat-dialog-close>Salir</button>
+    </mat-dialog-actions>
+
+</div>

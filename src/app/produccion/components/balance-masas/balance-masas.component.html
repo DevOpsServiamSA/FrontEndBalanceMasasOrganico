@@ -1,0 +1,246 @@
+<div class="container">
+  <mat-toolbar color="primary">
+    <span>BALANCE DE MASA ORGÁNICO</span>
+    <span class="tbar"></span>
+  </mat-toolbar>
+
+  
+
+  <div class="row">
+    <div class="col-sm-3">        
+      <mat-form-field class="input-autocomplete">
+        <input type="text" placeholder="LOTE MADRE" aria-label="Lote" matInput [formControl]="myControl" [matAutocomplete]="auto">
+        
+        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onOptionSelected($event.option.value)" [displayWith]="displayFn">
+          <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+            {{ option.lam_lote }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+  
+      <div>
+        <p *ngIf="selectedLoteActivo !== undefined">ESTADO DE LOTE: <strong>{{ selectedLoteActivo ? 'ACTIVO' : 'INACTIVO' }}</strong></p>
+      </div>
+    </div>
+  
+    <div class="col-sm-2" style="align-self: center;">
+      <button mat-stroked-button (click)="loadDetalleLoteMadre()" color="primary">Buscar</button>
+    </div>
+  
+    <!-- Columna modificada para incluir ambos campos de fecha uno debajo del otro -->
+    <div class="col-sm-2">
+      <mat-form-field class="small-input" style=" margin-top:3px; height: 65px;">
+        <mat-label>Fecha Inicio</mat-label>
+        <input matInput [(ngModel)]="fecha_inicio"  readonly>
+      </mat-form-field>
+      <mat-form-field class="small-input" style="height: 65px;">
+        <mat-label>Fecha Fin</mat-label>
+        <input matInput [(ngModel)]="fecha_fin"  readonly>
+      </mat-form-field>
+    </div>
+    <div class="col-sm-2">
+    </div>
+    <div class="col-sm-2" style="align-self: center;">
+      <button mat-flat-button (click)="openDialogSubProducto()" color="primary">Subproducto/Material en proceso</button>
+    </div>
+    
+  </div>
+
+
+
+  <mat-card >
+    <mat-card-header class="titulo-principal">
+      <mat-card-title>Detalle</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <br>
+
+      <mat-card class="color">
+        <mat-card-header class="titulo">
+          <mat-card-title></mat-card-title> <!-- CONTENEDOR SUPERIOR 3 TABLAS -->
+        </mat-card-header>
+        <mat-card-content>
+          <div class="row">
+            <!-- TABLA CONSUMO PROVEEDOR -->
+
+
+            <div class="col-sm-6">
+              <mat-card class="color">
+                <mat-card-header class="titulo">
+                  <mat-card-title style="font-size: smaller;">RESUMEN</mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                  <div class="table-container center-loading-table">
+                    <table *ngIf="!loadingResumenConsumo" mat-table [dataSource]="dataSourceResumenConsumo" class="mat-elevation-z8 small-table">
+
+                      <!-- Position Column -->
+                      <ng-container matColumnDef="material" >
+                        <th mat-header-cell *matHeaderCellDef class="column-header"> MATERIAL </th>
+                        <td mat-cell *matCellDef="let element"> {{element.material}} </td>
+                      </ng-container>
+
+                      <!-- Name Column -->
+                      <ng-container matColumnDef="kg">
+                        <th mat-header-cell *matHeaderCellDef class="titulo-rm"> KG </th>
+                        <td mat-cell *matCellDef="let element" class="align-right"> {{agregarComaMiles(element.kg)}} </td>
+                      </ng-container>
+
+                      <!-- Weight Column -->
+                      <ng-container matColumnDef="indice">
+                        <th mat-header-cell *matHeaderCellDef class="titulo-rm"> % </th>
+                        <td mat-cell *matCellDef="let element" class="align-right"> {{element.indice}}% </td>
+                      </ng-container>
+
+
+                      <tr mat-header-row *matHeaderRowDef="displayedColumnsResumenConsumo"></tr>
+                      <tr mat-row *matRowDef="let row; index as i;columns: displayedColumnsResumenConsumo;
+                      "(dblclick)="openDialogConsumoProveedor(row, i)"></tr>
+                       
+                    </table>
+                    <mat-spinner *ngIf="loadingResumenConsumo"></mat-spinner>
+                  </div>
+                </mat-card-content>
+              </mat-card>
+            </div>
+
+            <div class="col-sm-6">
+              <mat-card class="color">
+                <mat-card-header class="titulo">
+                  <mat-card-title style="font-size: smaller;">MERMA + SUBPRODUCTO</mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                  <div class="table-container center-loading-table">
+                    <table *ngIf="!loadingResumenMerma" mat-table [dataSource]="dataSourceResumenMerma" class="mat-elevation-z8 small-table">
+
+                      <ng-container matColumnDef="maxstd">
+                        <th mat-header-cell *matHeaderCellDef class="titulo-rm"> RANGO STD </th>
+                        <td mat-cell *matCellDef="let element" class="titulo-rm"> {{element.maxstd}} </td>
+                      </ng-container>
+
+                      <ng-container matColumnDef="real">
+                        <th mat-header-cell *matHeaderCellDef class="titulo-rm"> REAL </th>
+                        <td mat-cell *matCellDef="let element" class="titulo-rm" [ngClass]="{'fuera-rango': !RangoSTD(element.real, element.maxstd)}"> {{agregarComaMiles(element.real)}}% </td>
+                      </ng-container> 
+
+                      <!-- <ng-container matColumnDef="real_alm">
+                        <th mat-header-cell *matHeaderCellDef class="titulo-rm real-alm-header"> REAL </th>
+                        <td mat-cell *matCellDef="let element" class="titulo-rm" [ngClass]="{'fuera-rango': !RangoSTD(element.real, element.maxstd)}"> {{agregarComaMiles(element.real)}}% </td>
+                      </ng-container>  -->
+
+                      <tr mat-header-row *matHeaderRowDef="displayedColumnsResumenMerma"></tr>
+                      <tr mat-row *matRowDef="let row; columns: displayedColumnsResumenMerma;"></tr>
+                    </table>
+                    <mat-spinner *ngIf="loadingResumenMerma"></mat-spinner>
+                  </div>
+                </mat-card-content>
+              </mat-card>
+              <br>
+              <!-- <p *ngIf="valorFibraReutilizable !== null ">Se tiene como fibra reutilizable: {{agregarComaMiles(valorFibraReutilizable) }} </p> -->
+
+              <mat-card class="color">
+                <mat-card-header class="titulo">
+                  <mat-card-title style="font-size: smaller;">FIBRA RECUPERADA EN PROCESO</mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                  <div class="table-container center-loading-table">
+                    <table *ngIf="!loadingFibraReutilizable" mat-table [dataSource]="dataSourceResumenFibraReutilizable" class="mat-elevation-z8 small-table">
+
+                      <ng-container matColumnDef="material">
+                        <th mat-header-cell *matHeaderCellDef class="titulo-rm"> MATERIAL</th>
+                        <td mat-cell *matCellDef="let element" class="titulo-rm"> {{element.material}} </td>
+                      </ng-container>
+
+                      <ng-container matColumnDef="kg">
+                        <th mat-header-cell *matHeaderCellDef class="titulo-rm"> KG </th>
+                        <td mat-cell *matCellDef="let element" class="titulo-rm"> {{agregarComaMiles(element.kg)}} </td>
+                      </ng-container> 
+
+                      <ng-container matColumnDef="indice">
+                        <th mat-header-cell *matHeaderCellDef class="titulo-rm"> INDICE </th>
+                        <td mat-cell *matCellDef="let element" class="titulo-rm"> {{agregarComaMiles(element.indice)}}% </td>
+                      </ng-container> 
+
+                      <tr mat-header-row *matHeaderRowDef="displayedColumnsFibraReutilizable"></tr>
+                      <tr mat-row *matRowDef="let row; index as i;columns: displayedColumnsFibraReutilizable;
+                      "(dblclick)="openDialogFibraReutilizable(row, i)" ></tr>
+                    </table>
+                    <div *ngIf="!hasValidKgData" class="no-data-message">
+                      No existen datos para este lote madre.
+                    </div>
+                    <mat-spinner *ngIf="loadingFibraReutilizable"></mat-spinner>
+                  </div>
+                </mat-card-content>
+              </mat-card>
+
+            </div>
+
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <br>
+
+      <mat-card class="color">
+        <mat-card-header class="titulo-detalle-movimientos">
+          <mat-card-title>DETALLE MOVIMIENTO DE HILOS</mat-card-title> <!-- CONTENEDOR 4 TABLAS INFERIOR -->
+        </mat-card-header>
+        <br>
+        <mat-card-content>
+          <div class="row">
+            <!-- TABLA INVENTARIO INICIO HILO -->
+            
+
+            <!-- TABLA DE INGRESOS DE HILO GENERAL -->
+
+            <div class="col-sm-12">
+              <mat-card class="color">
+                <mat-card-header class="titulo-detalle-movimientos">
+                  <mat-card-title style="font-size: smaller;">RESUMEN INGRESOS Y SALIDAS DE HILOS</mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                  <div class="table-container center-loading-table">
+                    <table *ngIf="!loadingDetalleGeneralHilo" mat-table [dataSource]="dataSourceDetalleGeneralMovimientoHilo" class="mat-elevation-z8 small-table">
+
+                      <ng-container matColumnDef="lote">
+                        <th mat-header-cell *matHeaderCellDef class="header-name"> Lote </th>
+                        <td mat-cell *matCellDef="let element"> {{element.lote}} </td>
+                      </ng-container>
+
+                      <ng-container matColumnDef="ingresos">
+                        <th mat-header-cell *matHeaderCellDef class="titulo-ISS"> Ingresos(kg) </th>
+                        <td mat-cell *matCellDef="let element" (dblclick)="openDialogResumenConsecutivos('ingresos', element)" class="titulo-rm"> {{agregarComaMiles(element.ingresos)}} </td>
+                      </ng-container>
+
+                      <ng-container matColumnDef="salidas">
+                        <th mat-header-cell *matHeaderCellDef class="titulo-ISS"> Salidas(kg) </th>
+                        <td mat-cell *matCellDef="let element" (dblclick)="openDialogResumenConsecutivos('salidas', element)" class="titulo-rm"> {{agregarComaMiles(element.salidas)}} </td>
+                      </ng-container>
+
+                      <ng-container matColumnDef="stock_actual">
+                        <th mat-header-cell *matHeaderCellDef class="titulo-ISS"> Stock(kg) </th>
+                        <td mat-cell *matCellDef="let element" class="titulo-rm"> {{agregarComaMiles(element.stock_actual)}} </td>
+                      </ng-container>
+
+                      <tr mat-header-row  *matHeaderRowDef="ColumnsDetalleGeneralMovimientoHilo; sticky: true"></tr>
+
+                      <tr mat-row *matRowDef="let row;columns: ColumnsDetalleGeneralMovimientoHilo;"
+                        ></tr>
+                    </table>
+                    <mat-spinner *ngIf="loadingDetalleGeneralHilo"></mat-spinner>
+                  </div>
+                </mat-card-content>
+              </mat-card>
+            </div>
+
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </mat-card-content>
+  </mat-card>
+  
+  
+  <!-- <mat-spinner ></mat-spinner> -->
+  <!-- <div class="row" style="margin-top: 20px;">
+        
+      </div> -->
+</div>

@@ -1,0 +1,82 @@
+.color {
+    /*background-color: #F0F0F0;*/
+    border: 2px solid #BEC5C7;
+  }
+
+  .center-loading-table {
+    text-align: -webkit-center;
+  }
+
+  .table-container {
+    max-height: calc(70vh - 185px); /* ajuste de altura y evita que aparezcan dos scroll en dialog*/ 
+    overflow-y: auto;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+.titulo {
+    font-size: 20px;
+    font-weight: bold;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 10px;
+    padding: 1px 20px 0px;
+    background-color: #B5D6EC;
+    font-family: 'Roboto', sans-serif; /* Cambia la fuente del título de la tarjeta */
+    font-size: 18px;
+}
+
+.align-right {
+  text-align: right;
+}
+
+.icon-button img {
+  width: 33px; /* Ajusta el ancho de la imagen según tus necesidades */
+  height: auto; /* Mantén la proporción de la imagen */
+  margin-right: 3px; /* Opcional: Añade un espacio entre la imagen y el texto */
+}
+
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+.fecha-cell {
+  white-space: nowrap;  /* Evita el salto de línea */
+}
+
+.totals-container {
+  display: flex;
+  justify-content: space-between;
+  padding-left: 15px;
+}
+
+
+.total {
+  flex-basis: 0;
+  flex-grow: 1;
+  text-align: right;
+}
+
+.total-nro {
+  flex-grow: 0.5;
+}
+
+.total-nombre {
+  flex-grow: 2;
+}
+
+.total-kg {
+  flex-grow: 1;
+  padding-right: 20px;
+}
+
+.total-porcentaje {
+  flex-grow: 1.7;
+  padding-left: 15px;
+}
+
+.align-right {
+  text-align: right;
+}

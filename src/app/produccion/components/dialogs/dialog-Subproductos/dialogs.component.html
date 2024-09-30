@@ -1,0 +1,138 @@
+<div>
+
+    <h2 mat-dialog-title>Subproductos</h2>
+    <mat-dialog-content >
+
+      <mat-card >
+        <mat-card-header class="titulo-principal">
+          <mat-card-title>Detalle</mat-card-title>
+        </mat-card-header>
+        <mat-card-content >
+        <div class="row">
+            <div class="col-sm">
+                <mat-card class="color">
+                    <mat-card-header class="titulo">
+                        <mat-card-title style="font-size: smaller;">Inv. Ini. Subproducto</mat-card-title>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <!-- Contenido de la primera tabla aquí -->
+                        <div class="table-container">
+                            <table mat-table [dataSource]="dataSourceInventarioInicioSubProducto" class="mat-elevation-z8 small-table vertical">
+                              <!-- Position Column -->
+                              <ng-container matColumnDef="lote">
+                                <th mat-header-cell *matHeaderCellDef> Lote </th>
+                                <td mat-cell *matCellDef="let element"> {{element.lote}} </td>
+                              </ng-container>
+                            
+                              <!-- Weight Column -->
+                              <ng-container matColumnDef="kg">
+                                <th mat-header-cell *matHeaderCellDef> kg </th>
+                                <td mat-cell *matCellDef="let element"> {{element.kg}} </td>
+                              </ng-container>
+                            
+                              <tr mat-header-row *matHeaderRowDef="ColumnsInventarioIS"></tr>
+                              <tr mat-row *matRowDef="let row; columns: ColumnsInventarioIS;"></tr>
+                            </table>              
+                      </div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+
+            <div class="col-sm">
+              <mat-card class="color">
+                  <mat-card-header class="titulo">
+                      <mat-card-title style="font-size: smaller;">Ingreso Subproductos</mat-card-title>
+                  </mat-card-header>
+                  <mat-card-content>
+                      <!-- Contenido de la segunda tabla aquí -->
+                      <div class="table-container center-loading-table">
+                          <table *ngIf="!loadingIngresosSubproducto" mat-table [dataSource]="dataSouceIngresoSubProducto" class="mat-elevation-z8 small-table vertical">
+                            <!-- Position Column -->
+                            <ng-container matColumnDef="lote">
+                              <th mat-header-cell *matHeaderCellDef> Lote </th>
+                              <td mat-cell *matCellDef="let element"> {{element.lote}} </td>
+                            </ng-container>
+                          
+                            <!-- Weight Column -->
+                            <ng-container matColumnDef="kg">
+                              <th mat-header-cell *matHeaderCellDef class="align-right"> kg </th>
+                              <td mat-cell *matCellDef="let element" class="align-right"> {{agregarComaMiles(element.kg)}} </td>
+                            </ng-container>
+                          
+                            <tr mat-header-row *matHeaderRowDef="ColumnsInventarioIS"></tr>
+                            <tr mat-row *matRowDef="let row; columns: ColumnsInventarioIS;"></tr>
+                          </table>
+                          <mat-spinner *ngIf="loadingIngresosSubproducto"></mat-spinner>          
+                    </div>
+                  </mat-card-content>
+              </mat-card>
+          </div>
+
+
+          <div class="col-sm">
+              <mat-card class="color">
+                  <mat-card-header class="titulo">
+                      <mat-card-title style="font-size: smaller;">Salida Subproducto</mat-card-title>
+                  </mat-card-header>
+                  <mat-card-content>
+                      <!-- Contenido de la segunda tabla aquí -->
+                      <div class="table-container">
+                          <table mat-table [dataSource]="dataSouceSalidaSubProducto" class="mat-elevation-z8 small-table vertical">
+                            <!-- Position Column -->
+                            <ng-container matColumnDef="lote">
+                              <th mat-header-cell *matHeaderCellDef> Lote </th>
+                              <td mat-cell *matCellDef="let element"> {{element.lote}} </td>
+                            </ng-container>
+                          
+                            <!-- Weight Column -->
+                            <ng-container matColumnDef="kg">
+                              <th mat-header-cell *matHeaderCellDef class="align-right"> kg </th>
+                              <td mat-cell *matCellDef="let element" class="align-right"> {{agregarComaMiles(element.kg)}} </td>
+                            </ng-container>
+                          
+                            <tr mat-header-row *matHeaderRowDef="ColumnsInventarioIS"></tr>
+                            <tr mat-row *matRowDef="let row; columns: ColumnsInventarioIS;"></tr>
+                          </table>              
+                    </div>
+                  </mat-card-content>
+              </mat-card>
+          </div>
+
+          <div class="col-sm">
+              <mat-card class="color">
+                  <mat-card-header class="titulo">
+                      <mat-card-title style="font-size: smaller;">Inv Fin Subproducto</mat-card-title>
+                  </mat-card-header>
+                  <mat-card-content>
+                      <!-- Contenido de la segunda tabla aquí -->
+                      <div class="table-container">
+                          <table mat-table [dataSource]="dataSouceInventarioFinSubProducto" class="mat-elevation-z8 small-table vertical">
+                            <!-- Position Column -->
+                            <ng-container matColumnDef="lote">
+                              <th mat-header-cell *matHeaderCellDef> Lote </th>
+                              <td mat-cell *matCellDef="let element"> {{element.lote}} </td>
+                            </ng-container>
+                          
+                            <!-- Weight Column -->
+                            <ng-container matColumnDef="kg">
+                              <th mat-header-cell *matHeaderCellDef class="align-right"> kg </th>
+                              <td mat-cell *matCellDef="let element" class="align-right"> {{agregarComaMiles(element.kg)}} </td>
+                            </ng-container>
+                          
+                            <tr mat-header-row *matHeaderRowDef="ColumnsInventarioIS"></tr>
+                            <tr mat-row *matRowDef="let row; columns: ColumnsInventarioIS;"></tr>
+                          </table>              
+                    </div>
+                  </mat-card-content>
+              </mat-card>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <button mat-stroked-button mat-dialog-close>Salir</button>
+    </mat-dialog-actions>
+
+</div>

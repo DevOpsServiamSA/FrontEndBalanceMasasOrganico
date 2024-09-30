@@ -1,0 +1,84 @@
+<div class="container">
+    <h1 mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle></h1>
+    <mat-dialog-content class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <mat-card class="color">
+                    <mat-card-header class="titulo">
+                        <mat-card-title style="font-size: smaller;">DETALLE INGRESOS POR LOTE / PROVEEDOR: <strong> {{this.data.data_lote_proveedor}} / {{this.data.data_razon_social}}</strong> </mat-card-title>
+                        <span class="example-spacer"></span>
+                        <button mat-button class="icon-button" (click)="exportTableToExcel()">
+                            <!-- <img src="../../../../../assets/img/xls.png"> -->
+                            <mat-icon>save_alt</mat-icon>
+                            Exportar
+                        </button>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <div class="table-container center-loading-table">
+                            <table *ngIf="!loadingConsumoProveedorDetalle" mat-table  [dataSource]="dataSourceConsumoProveedorDetalle"
+                                class="mat-elevation-z8 small-table">
+
+                                <!-- Position Column -->
+                                <ng-container matColumnDef="fecha_embarque">
+                                    <th mat-header-cell *matHeaderCellDef> Fecha Embarque </th>
+                                    <td mat-cell *matCellDef="let element" class="fecha-cell">
+                                        {{ element.fecha_embarque ? formatDate(element.fecha_embarque) : '--/--/----' }}
+                                        </td>
+                                </ng-container>
+
+                                <!-- Name Column -->
+                                <ng-container matColumnDef="embarque">
+                                    <th mat-header-cell *matHeaderCellDef> Embarque </th>
+                                    <td mat-cell *matCellDef="let element"> {{element.embarque}} </td>
+                                </ng-container>
+
+                                <!-- Weight Column -->
+                                <ng-container matColumnDef="orden_compra">
+                                    <th mat-header-cell *matHeaderCellDef> Orden Compra </th>
+                                    <td mat-cell *matCellDef="let element"> {{element.orden_compra}} </td>
+                                </ng-container>
+
+                                <!-- Symbol Column -->
+                                <ng-container matColumnDef="guia_remision">
+                                    <th mat-header-cell *matHeaderCellDef> Guía Remisión </th>
+                                    <td mat-cell *matCellDef="let element"> {{element.guia_remision}} </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="articulo">
+                                    <th mat-header-cell *matHeaderCellDef> Artículo </th>
+                                    <td mat-cell *matCellDef="let element" class="fecha-cell"> {{element.articulo}} </td>
+                                </ng-container>
+                                
+                                <ng-container matColumnDef="cantidad_recibida_oc">
+                                    <th mat-header-cell *matHeaderCellDef class="align-right"> Cantidad Recibida OC </th>
+                                    <td mat-cell *matCellDef="let element" class="align-right"> {{element.cantidad_recibida_oc}} </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="cantidad_consumida">
+                                    <th mat-header-cell *matHeaderCellDef class="align-right"> Cantidad Consumida </th>
+                                    <td mat-cell *matCellDef="let element" class="align-right"> {{redondearDecimal(element.cantidad_consumida,0)}} </td>
+                                </ng-container>
+
+                                <tr mat-header-row *matHeaderRowDef="columnsConsumoProveedorDetalle; sticky: true"></tr>
+                                <tr mat-row *matRowDef="let row; columns: columnsConsumoProveedorDetalle;"></tr>
+                            </table>
+                            <mat-spinner *ngIf="loadingConsumoProveedorDetalle"></mat-spinner>
+                        </div>
+                        <hr>
+                        <div class="totals-container">
+                            <div class="total total-nombre">Total</div>  <!-- Columna 'Razón Social' -->
+                            <div class="total total-kg">{{ agregarComaMiles(  redondearDecimal(getTotalKG(),0)) }}</div>  <!-- Columna 'Total (Kg)' -->
+                        </div>
+
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <button mat-stroked-button mat-dialog-close>Salir</button>
+        
+    </mat-dialog-actions>
+
+</div>

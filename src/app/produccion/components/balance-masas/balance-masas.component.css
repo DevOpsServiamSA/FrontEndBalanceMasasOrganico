@@ -1,0 +1,190 @@
+.input{
+    width: 200px;
+    padding: 20px;
+  }
+
+  .column-header {
+    background: #b4b4b6;  /* Color de fondo para el encabezado de la columna */
+    padding: 8px;               /* Espaciado interno */
+    box-shadow: 2px 2px 4px rgba(187, 102, 102, 0.1); /* Sombra */
+    border-radius: 4px;         /* Bordes redondeados */
+    text-align: center;         /* Alineación centrada del texto */
+  }
+
+  .tbar {
+    flex: 1 1 auto;
+  }
+
+  .container {
+    padding: 20px;
+  }
+
+  button {
+    margin-left: 10px;
+  }
+
+  .small-table {
+    font-size: 12px; /* Reducir el tamaño de fuente */
+  }
+  
+  .small-table th,
+  .small-table td {
+    padding: 4px; /* Ajustar el relleno */
+  }
+
+  .table-container {
+    max-height: 300px; /* ajusta la altura máxima según tu preferencia */
+    overflow-y: auto;
+  }
+  
+  .color {
+    /*background-color: #F0F0F0;*/
+    border: 2px solid #BEC5C7;
+  }
+
+
+
+.titulo {
+    font-size: 20px;
+    font-weight: bold;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 10px;
+    padding: 1px 20px 0px;
+    background-color: #B5D6EC;
+    font-family: 'Roboto', sans-serif; /* Cambia la fuente del título de la tarjeta */
+    font-size: 18px;
+    justify-content: center;
+}
+
+.titulo-detalle-movimientos{
+  font-size: 20px;
+  font-weight: bold;
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 10px;
+  padding: 1px 20px 0px;
+  background-color: #7c98d4;
+  font-family: 'Roboto', sans-serif; /* Cambia la fuente del título de la tarjeta */
+  font-size: 18px;
+  justify-content: center;
+}
+
+.titulo-principal{
+  font-size: 15px;
+    font-weight: bold;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 10px;
+    padding: 1px 20px 0px;
+    background-color: #E4E6E8;
+}
+
+.vertical {
+  border-collapse: collapse; /* Fusionar los bordes de las celdas */
+}
+
+.small-title {
+  font-size: smaller;
+}
+
+tr:hover {
+  background-color: #d1c8c8;
+  cursor: pointer;
+}
+
+/*PARA COLOREAR ENCABEZADO DE COLUMNA*/
+.header-name:hover {
+  background-color: #868383; /* Cambia el color de fondo cuando el mouse está sobre el nombre de la columna */
+  cursor: pointer; /* Cambia el cursor a un puntero cuando está sobre el nombre de la columna */
+}
+
+.loader {
+  border: 8px solid #f3f3f3; /* Light grey */
+  border-top: 8px solid #3498db; /* Blue */
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+  margin: auto;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.center-loading-table {
+  text-align: -webkit-center;
+}
+
+
+.input-autocomplete {
+  width: 100%;
+  
+}
+
+.align-right {
+  text-align: right;
+}
+
+
+.titulo-rm {
+  text-align: center;
+}
+
+.titulo-ISS{
+  text-align: center;
+  font-weight: bold;
+  font-size: medium;
+}
+
+.small-table th,
+.small-table td {
+  padding: 4px; /* Ajustar el relleno */
+  border-left: 1px solid #ccc; /* Agregar línea vertical a la izquierda */
+  border-right: 1px solid #ccc; /* Agregar línea vertical a la derecha */
+}
+
+
+
+.fuera-rango {
+  color: red;
+}
+
+
+/* Añadir la descripción 'Fibra Total' debajo del header REAL */
+.real-header::after {
+  content: "Fibra Total";
+  display: block;
+  font-size: smaller;
+  color: #000;
+  text-align: center;
+  margin-top: 5px;
+}
+
+/* Añadir la descripción 'Fibra Almacén' debajo del header REAL_ALM */
+.real-alm-header::after {
+  content: "Fibra Almacén";
+  display: block;
+  font-size: smaller;
+  color: #000;
+  text-align: center;
+  margin-top: 5px;
+}
+
+/* Asegurar que la fila del encabezado sea lo suficientemente alta */
+.mat-header-row th {
+  vertical-align: bottom;
+}
+
+
+.small-input .mat-form-field-infix {
+  width: 100px; /* Ajusta este valor para reducir el ancho del input */
+  padding: 0 18px; /* Opcional: Ajusta el padding interno del input */
+}
+
+.small-input .mat-input-element {
+  font-size: 12px; /* Ajusta este valor para cambiar el ancho del input */
+}

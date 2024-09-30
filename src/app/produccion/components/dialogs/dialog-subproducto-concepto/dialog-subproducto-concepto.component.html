@@ -1,0 +1,63 @@
+
+<div class="container">
+    <h1 mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle></h1>
+    <mat-dialog-content class="content">
+        <div class="row">
+            <div class="col-sm-12">
+                <mat-card class="color">
+                    <mat-card-header class="titulo">
+                        <mat-card-title style="font-size: smaller;">RESUMEN SUBPRODUCTO POR LOTE MADRE: <strong>{{this.lote_madre}}</strong></mat-card-title>
+                        <span class="example-spacer"></span>
+                         <button mat-stroked-button class="icon-button button-spacing" (click)="Exportar()">
+                            <mat-icon>save_alt</mat-icon>
+                            Exportar
+                        </button> 
+                        <button mat-stroked-button class="icon-button" (click)="VerConsumoSubProductoTodos()">
+                            <mat-icon>visibility</mat-icon>
+                            Ver todos
+                        </button> 
+                    </mat-card-header>
+                    <mat-card-content>
+                        <div class="table-container center-loading-table">
+                            <table *ngIf="!loadingConceptosSupproducto" mat-table [dataSource]="dataSourceSubProductoConceptos"
+                                class="mat-elevation-z8 small-table">
+
+                                <ng-container matColumnDef="articulo">
+                                    <th mat-header-cell *matHeaderCellDef> ARTÍCULO </th>
+                                    <td mat-cell *matCellDef="let element"> {{element.articulo}} </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="descripcion">
+                                    <th mat-header-cell *matHeaderCellDef> DESCRIPCIÓN </th>
+                                    <td mat-cell *matCellDef="let element"> {{element.descripcion}} </td>
+                                </ng-container>
+
+
+                                <!-- Name Column -->
+                                <ng-container matColumnDef="cantidad">
+                                    <th mat-header-cell *matHeaderCellDef class="align-right"> KG </th>
+                                    <td mat-cell *matCellDef="let element" class="align-right"> {{agregarComaMiles(element.cantidad)}} </td>
+                                </ng-container>
+                                
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+                                (dblclick)="openDialogDetalleSubProducto(row)"></tr>
+                            </table>
+                            <mat-spinner *ngIf="loadingConceptosSupproducto"></mat-spinner>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+
+        <div class="totals-container">
+            <div class="total total-nombre">Total</div>  <!-- Columna 'Razón Social' -->
+            <div class="total total-kg">{{ agregarComaMiles(getTotalKG()) }}</div>  <!-- Columna 'Total (Kg)' -->
+        </div>
+
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <button mat-stroked-button mat-dialog-close>Salir</button>
+    </mat-dialog-actions>
+
+</div>

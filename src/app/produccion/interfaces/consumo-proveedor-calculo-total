@@ -1,0 +1,6 @@
+interface ConsumoProveedor {
+  nro: number;
+  nombre: string | null;
+  kg: number;
+  porcentaje: number;
+}
