@@ -56,4 +56,19 @@ export class BaseService {
       catchError(this.handleError)
     );
   }
+
+  public postFiles(url: string, data: FormData, authorized: boolean = true): Observable<any> {
+    const headers = new HttpHeaders({
+        // Aquí no es necesario especificar el Content-Type para multipart/form-data
+        // HttpClient se encargará de establecerlo correctamente        
+    });
+    return this.http.post(`${this.baseUrl}${url}`, data, 
+      { 
+        headers, 
+        reportProgress: true, 
+        observe: 'events' 
+      }).pipe(
+      catchError(this.handleError)
+  );
+  }
 }

@@ -78,10 +78,12 @@ export interface ResumenConsecutivoSalida{
 
 export interface DetalleConsumoProveedor{
     fecha_embarque:string,
+    lote_madre:string,
     embarque:string,
     orden_compra:string,
     guia_remision:string,
     articulo:string,
+    cantidad:string,
     cantidad_recibida_oc:string,
     cantidad_consumida:string
 }

@@ -6,6 +6,7 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { UtilidadService } from '../../../services/utilidad.service';
 import * as XLSX from 'xlsx';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { take } from 'rxjs';
 
 
 @Component({
@@ -15,11 +16,13 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 })
 export class DialogConsumoProveedorDetalleComponent implements OnInit {
   dataSourceConsumoProveedorDetalle = new MatTableDataSource<DetalleConsumoProveedor>();
-  columnsConsumoProveedorDetalle: string[] = ['fecha_embarque', 'embarque', 'orden_compra','guia_remision','articulo','cantidad_recibida_oc','cantidad_consumida'];
+  columnsConsumoProveedorDetalle: string[] = ['fecha_embarque', 'lote_madre','embarque', 'orden_compra','guia_remision','articulo','cantidad','cantidad_recibida_oc','cantidad_consumida'];
   public nombre!:string;
   public lote_madre!: string;
   public lote_proveedor!: string;
-
+  selectedFile: File | null = null;
+  loading:boolean = false;
+  isUploading: boolean = false;
 
   constructor(private _utilidadServicio: UtilidadService,
     private _consumoProvedorService: ConsumoProveedorServiceService,
@@ -46,6 +49,41 @@ export class DialogConsumoProveedorDetalleComponent implements OnInit {
     });
   }*/
 
+
+    onFileSelected(event: any): void {
+      const file = event.target.files[0];
+      if (file) {
+        this.selectedFile = file; // Almacenar el archivo seleccionado
+      }
+    }
+
+
+    uploadExcel(): void {    
+      if (!this.selectedFile) {
+        alert('Por favor selecciona un archivo');
+        return;
+      }
+      // Deshabilitar el botón durante la carga
+      this.isUploading = true;
+      this.loading = true;
+      // Enviar el archivo al servicio
+      this._consumoProvedorService.guardarExcelFibraDetalle([this.selectedFile])
+      .pipe(take(1))
+      .subscribe({
+        next: (response) => {
+          alert('Datos cargados y guardados exitosamente.');
+          this.isUploading = false;
+          this.loading = false;
+          this.cargarDatosDetalleConsumoProveedor();
+        },
+        error: (err) => {
+          console.error('Error al cargar el archivo', err);
+          alert('Error al cargar el archivo.');
+          this.isUploading = false; // Habilitar el botón nuevamente
+        },
+      });
+    }
+  
 
   formatDate(date: string): string {
     const dateObj = new Date(date);
@@ -81,8 +119,8 @@ export class DialogConsumoProveedorDetalleComponent implements OnInit {
 
   cargarDatosDetalleConsumoProveedor(){
     this.loadingConsumoProveedorDetalle = true;
-    this._consumoProvedorService.getConsumoProveedorDetalle(this.data.data_lote_madre,this.data.data_lote_proveedor,this.data.data_razon_social).subscribe(data =>{
-      this.dataSourceConsumoProveedorDetalle.data = this.processData(data);
+    this._consumoProvedorService.getConsumoProveedorDetalle(/*this.data.data_lote_madre,this.data.data_lote_proveedor,this.data.data_razon_social*/).subscribe(data =>{
+      this.dataSourceConsumoProveedorDetalle.data = data;
       //this.dataSourceConsumoProveedorDetalle.data = data;
       this.loadingConsumoProveedorDetalle = false;
     }, (error: any) => {

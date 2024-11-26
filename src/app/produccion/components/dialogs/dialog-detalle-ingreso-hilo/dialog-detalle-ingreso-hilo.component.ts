@@ -15,6 +15,8 @@ export class DialogDetalleIngresoHiloComponent implements OnInit {
   public lote_madre!: string;
   public lote_hijo!: string;
   public consecutivo!:string;
+  selectedFile: File | null = null;
+
   constructor(
     private _consumoProvedorService: ConsumoProveedorServiceService,
     private _utilidadServicio: UtilidadService,
@@ -30,13 +32,39 @@ export class DialogDetalleIngresoHiloComponent implements OnInit {
   'cantidad','consecutivo','desc_consecutivo','aplicacion','referencia'];
   dataSourceDetalleIngresoHilo = new MatTableDataSource<DetalleMovimientoIngresoHilo>();
 
+  onFileSelected(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      this.selectedFile = file; // Almacenar el archivo seleccionado
+    }
+  }
+
+  uploadExcel(): void {
+    if (!this.selectedFile) {
+      alert('Por favor selecciona un archivo');
+      return;
+    }
+
+    // Enviar el archivo al servicio
+    this._consumoProvedorService.guardarExcel([this.selectedFile]).subscribe({
+      next: (response) => {
+        alert('Datos cargados y guardados exitosamente.');
+        // Aquí puedes actualizar la tabla o realizar cualquier acción adicional
+      },
+      error: (err) => {
+        console.error('Error al cargar el archivo', err);
+        alert('Error al cargar el archivo.');
+      },
+    });
+  }
+
   ngOnInit(): void {
     this.loadDatos();
   }
 
 
   cargarDetalleIngresoHilo(lote_madre: string, lote_hijo: string, consecutivo: string) {
-    this._consumoProvedorService.getDetalleIngresoHilo(lote_madre,this.lote_hijo,this.data.dato3).subscribe(data =>{
+    this._consumoProvedorService.getDetalleConsecutivoIngresoHilo(lote_madre,this.lote_hijo,this.data.dato3).subscribe(data =>{
       this.dataSourceDetalleIngresoHilo.data = data
     });
   }
@@ -101,7 +129,7 @@ export class DialogDetalleIngresoHiloComponent implements OnInit {
 
   cargarDatosDetalleIngresoHilos(){
     this.loadingDetalleIngresoHilos = true;
-    this._consumoProvedorService.getDetalleIngresoHilo(this.lote_madre,this.lote_hijo,this.data.dato3).subscribe(data =>{
+    this._consumoProvedorService.getDetalleIngresoHilo().subscribe(data =>{
       this.dataSourceDetalleIngresoHilo.data = data
       this.loadingDetalleIngresoHilos = false;
     }, (error: any) => {

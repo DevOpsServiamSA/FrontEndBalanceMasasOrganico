@@ -10,8 +10,9 @@ export class ConsumoProveedorServiceService {
   constructor(private baseService: BaseService) { }
 
 /* API PROVEEDOR CONSUMO, LOTE X PROVEEDOR, DETALLE POR LOTE PROVEEDOR */
-  getConsumoProveedorDetalle(lote_madre: string, lote_proveedor: string, proveedor: string): Observable<any> {
-    return this.baseService.get(`/ConsumoProveedorDetalle/${lote_madre}/${lote_proveedor}/${proveedor}`);
+  getConsumoProveedorDetalle(/*lote_madre: string, lote_proveedor: string, proveedor: string*/): Observable<any> {
+    //return this.baseService.get(`/ConsumoProveedorDetalle/${lote_madre}/${lote_proveedor}/${proveedor}`);
+    return this.baseService.get(`/ConsumoProveedorDetalle/DetalleFibra`);
   }
   getAllInformationxLote(lote_madre: string): Observable<any> {
     return this.baseService.get(`/loteMadre/${lote_madre}`);
@@ -68,8 +69,13 @@ export class ConsumoProveedorServiceService {
   }
 
   //DETALLE INGRESO HILO
-  getDetalleIngresoHilo(lote_madre: string,lote_hijo: string, consecutivo:string): Observable<any> {
-    return this.baseService.get(`/DetalleMovimientos/IngresosHilo/${lote_madre}/${lote_hijo}/${consecutivo}`);
+  getDetalleIngresoHilo(/*lote_madre: string,lote_hijo: string, consecutivo:string*/): Observable<any> {
+    return this.baseService.get(`/DetalleMovimientos/IngresosHilo`);
+  }
+
+  //DETALLE CONSECUTIVO INGRESOS HILO
+  getDetalleConsecutivoIngresoHilo(lote_madre: string,lote_hijo: string, consecutivo:string): Observable<any> {
+    return this.baseService.get(`/DetalleMovimientos/ConsecutivoIngresos/${lote_madre}/${lote_hijo}/${consecutivo}`);
   }
 
   getDetalleSalidaHilo(lote_madre: string,lote_hijo: string, consecutivo: string): Observable<any> {
@@ -155,5 +161,24 @@ export class ConsumoProveedorServiceService {
   getResumenFibraReutilizable(lote_madre: string): Observable<any> {
     return this.baseService.get(`/DetalleFibraProduccion/${lote_madre}`);
   }
+
+  guardarExcel(files: File[]): Observable<any> {
+    const formData: FormData = new FormData();
+    files.forEach((file, index) => {
+      formData.append(`file`, files[0], files[0].name);
+    });
+    
+    return this.baseService.postFiles(`/DetalleIngresosHilos/CargarExcelHilos`, formData);
+  }
+
+  guardarExcelFibraDetalle(files: File[]): Observable<any> {
+    const formData: FormData = new FormData();
+    files.forEach((file, index) => {
+      formData.append(`file`, files[0], files[0].name);
+    });
+    
+    return this.baseService.postFiles(`/ConsumoProveedor/CargarExcelDetalleFibra`, formData);
+  }
+
 }
 

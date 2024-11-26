@@ -5,6 +5,7 @@ import { ConsumoProveedorServiceService } from '../../../../services/consumo-pro
 import { UtilidadService } from '../../../../services/utilidad.service';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import * as XLSX from 'xlsx';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-dialog-resumen-consecutivo-todos',
@@ -20,6 +21,10 @@ export class DialogResumenConsecutivoTodosComponent implements OnInit{
   public lote_hijo!: string;
   public consecutivo!: string;
   loadingDetalleIngreso: boolean = false;
+  selectedFile: File | null = null;
+  loading:boolean = false;
+  isUploading: boolean = false; // Nueva variable para controlar el estado de carga
+
 
   constructor(
     private _consumoProvedorService: ConsumoProveedorServiceService,
@@ -28,24 +33,59 @@ export class DialogResumenConsecutivoTodosComponent implements OnInit{
       this.lote_madre = data.data;
       this.lote_hijo = data.data2;
       this.consecutivo = data.dato3;
-      this.cargarDetalleIngresoHiloTodos(data.data,this.lote_hijo,this.consecutivo)
+      //this.cargarDetalleIngresoHiloTodos(data.data,this.lote_hijo,this.consecutivo)
     
     }
   ngOnInit(): void {
     this.cargarDatosDetalleIngresoHiloTodos();
   }
 
+  onFileSelected(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      this.selectedFile = file; // Almacenar el archivo seleccionado
+    }
+  }
 
-    cargarDetalleIngresoHiloTodos(lote_madre: string, lote_hijo: string, consecutivo: string) {
-      this._consumoProvedorService.getDetalleIngresoHilo(lote_madre,this.lote_hijo,this.consecutivo).subscribe(data =>{
+  uploadExcel(): void {    
+    if (!this.selectedFile) {
+      alert('Por favor selecciona un archivo');
+      return;
+    }
+    // Deshabilitar el botón durante la carga
+    this.isUploading = true;
+    this.loading = true;
+    // Enviar el archivo al servicio
+    this._consumoProvedorService.guardarExcel([this.selectedFile])
+    .pipe(take(1))
+    .subscribe({
+      next: (response) => {
+        alert('Datos cargados y guardados exitosamente.');
+        this.isUploading = false;
+        this.loading = false;
+        this.cargarDatosDetalleIngresoHiloTodos();
+      },
+      error: (err) => {
+        console.error('Error al cargar el archivo', err);
+        alert('Error al cargar el archivo.');
+        this.isUploading = false; // Habilitar el botón nuevamente
+      },
+    });
+  }
+
+
+
+
+   /* cargarDetalleIngresoHiloTodos(lote_madre: string, lote_hijo: string, consecutivo: string) {
+      this._consumoProvedorService.getDetalleIngresoHilo().subscribe(data =>{
         this.dataSourceExportarDetalleIngresoTodo.data = data
       });
-    }
+    }*/
 
 
     cargarDatosDetalleIngresoHiloTodos(){
       this.loadingDetalleIngreso = true;
-      this._consumoProvedorService.getDetalleIngresoHilo(this.lote_madre,this.lote_hijo,this.consecutivo).subscribe(data =>{
+      this._consumoProvedorService.getDetalleIngresoHilo().subscribe(data =>{
         this.dataSourceExportarDetalleIngresoTodo.data = data
         this.loadingDetalleIngreso = false;
       }, (error: any) => {

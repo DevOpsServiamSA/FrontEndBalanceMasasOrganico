@@ -14,6 +14,7 @@ import { DialogConsumoHiloDetalleComponent } from '../dialogs/dialog-consumo-hil
 import { DialogSubproductoConceptoComponent } from '../dialogs/dialog-subproducto-concepto/dialog-subproducto-concepto.component';
 import { DialogProductoProcesoArticuloComponent } from '../dialogs/dialog-producto-proceso-articulo/dialog-producto-proceso-articulo.component';
 import { DialogDetalleFibraReutilizableComponent } from '../dialogs/dialog-detalle-fibra-reutilizable/dialog-detalle-fibra-reutilizable.component';
+import { DialogResumenConsecutivoTodosComponent } from '../dialogs/dialog-resumen-consecutivo/dialog-resumen-consecutivo-todos/dialog-resumen-consecutivo-todos.component';
 
 
 @Component({
@@ -31,11 +32,17 @@ export class BalanceMasasComponent implements OnInit {
   dataSourceResumenConsumo = new MatTableDataSource<ResumenConsumo>();
   dataSourceResumenMerma = new MatTableDataSource<ResumenMerma>();
   dataSourceDetalleFibraReutilizable = new MatTableDataSource<DetalleFibraReutilizable>();
-  dataSourceResumenFibraReutilizable = new MatTableDataSource<ResumenConsumo>();
+  
 
   dataSourceDetalleGeneralMovimientoHilo = new MatTableDataSource<DetalleGeneralMovimientoHilo>();
 
   dataSourcePeriodoProduccion = new MatTableDataSource<PeriodoProduccion>();
+
+  dataSourceResumenFibraReutilizable = [
+    { material: 'HILO', kg: 1500, indice: 45 },
+    { material: 'FIBRA', kg: 3000, indice: 60 },
+    { material: 'CINTA', kg: 1200, indice: 30 }
+  ]
 
 
   //DEFINICION E INICIALIZACIÓN DE VARIABLES
@@ -139,16 +146,17 @@ export class BalanceMasasComponent implements OnInit {
   openDialogFibraReutilizable(rowData: any, index: number): void{
     const lote = this.getLoteValue();
     if(index===0){
-      //this.cargarConsumoAlgodonProveedor();
-      const dialogRef = this.dialog.open(DialogDetalleFibraReutilizableComponent, {
-        width:'1000px',
-        data: { data : lote
-         }         
-      });    
-      dialogRef.afterClosed().subscribe(result => {
-        
+      const dialogRef = this.dialog.open(DialogResumenConsecutivoTodosComponent, {
+        data:{data: this.lote_madre,
+        dato3: 'TODOS'},
+        width:'1800px'
       });
-
+      dialogRef.afterClosed().subscribe(result => {
+        console.log('Dialog');
+      });
+    }
+    if(index === 1){
+      
     }
   }
   
@@ -229,10 +237,10 @@ export class BalanceMasasComponent implements OnInit {
       //this.cargarInventarioFinHilo();
 
       this.cargarResumenConsumo();
-      this.cargarResumenMerma();      
+      //this.cargarResumenMerma();      
       this.cargarDetalleMovimientoGeneralHilo();
-      this.cargarFechaProduccion();
-      this.cargarResumenFibraReutilizable();
+      //this.cargarFechaProduccion();
+      //this.cargarResumenFibraReutilizable();
       //this.cargarConsumoAlgodonProveedor();
 /*
       
@@ -342,11 +350,11 @@ export class BalanceMasasComponent implements OnInit {
     this.loadingFibraReutilizable = true;
 
     this._consumoProvedorService.getResumenFibraReutilizable(lote).subscribe(data =>{
-      this.dataSourceResumenFibraReutilizable.data = data
+      //this.dataSourceResumenFibraReutilizable.data = data
 
       const filteredData = data.filter((item: { kg: string | number | null; }) => item.kg !== null && item.kg !== '' && item.kg !== 0);
 
-      this.dataSourceResumenFibraReutilizable.data = filteredData; 
+      //this.dataSourceResumenFibraReutilizable.data = filteredData; 
       this.hasValidKgData = filteredData.length > 0;
 
       this.loadingFibraReutilizable = false;

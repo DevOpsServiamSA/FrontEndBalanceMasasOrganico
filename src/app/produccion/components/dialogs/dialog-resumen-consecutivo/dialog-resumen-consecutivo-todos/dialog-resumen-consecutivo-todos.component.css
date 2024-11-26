@@ -56,3 +56,11 @@ tr:hover {
 .center-loading-table {
   text-align: -webkit-center;
 }
+
+
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50px; /* Ajusta el tamaño según necesites */
+}

@@ -1,31 +1,31 @@
 .color {
-    /*background-color: #F0F0F0;*/
-    border: 2px solid #BEC5C7;
-    
-  }
+  border: 2px solid #BEC5C7;
+}
 
-  .fecha-cell {
-    white-space: nowrap;  /* Evita el salto de línea */
-  }
+.fecha-cell {
+  white-space: nowrap;
+}
 
-  .content {
-    padding-top: 20px;
-    padding-left: inherit;
-    padding-right: inherit;
-  }
+.content {
+  padding-top: 20px;
+  padding-left: inherit;
+  padding-right: inherit;
+  max-height: calc(100vh - 150px); /* Limita la altura del diálogo */
+  overflow: hidden; /* Evita que se agregue un scroll extra aquí */
+}
 
-  .table-container {
-    max-height: calc(70vh - 185px); /* ajusta la altura máxima según tu preferencia */
-    overflow-y: auto;
-  }
+.table-container {
+  max-height: calc(60vh - 185px); /* Ajusta la altura máxima de la tabla */
+  overflow-y: auto; /* Aquí va el scroll solo para la tabla */
+}
 
 .titulo {
-    font-size: 20px;
-    font-weight: bold;
-    border-bottom: 1px solid #ccc;
-    margin-bottom: 10px;
-    padding: 1px 20px 0px;
-    background-color: #B5D6EC;
+  font-size: 20px;
+  font-weight: bold;
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 10px;
+  padding: 1px 20px 0px;
+  background-color: #B5D6EC;
 }
 
 .example-spacer {
@@ -43,14 +43,14 @@ tr:hover {
 
 .mat-header-cell,
 .mat-cell {
-    padding-left: 2px; /* Ajusta el valor según tus necesidades */
-    padding-right: 2px; /* Ajusta el valor según tus necesidades */
+  padding-left: 2px;
+  padding-right: 2px;
 }
 
 .icon-button img {
-  width: 33px; /* Ajusta el ancho de la imagen según tus necesidades */
-  height: auto; /* Mantén la proporción de la imagen */
-  margin-right: 3px; /* Opcional: Añade un espacio entre la imagen y el texto */
+  width: 33px;
+  height: auto;
+  margin-right: 3px;
 }
 
 .center-loading-table {
@@ -92,5 +92,5 @@ tr:hover {
 }
 
 .button-spacing {
-  margin-right: 10px; /* Ajusta este valor según la cantidad de espacio que desees */
+  margin-right: 10px;
 }
